@@ -1,6 +1,7 @@
 package com.app.Model;
 
 import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 @Setter
 @Getter
@@ -8,6 +9,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @ToString
 public class HostelOwnerModel {
+    @Id
+    private String id;
     private String hostelName;
     private  String hostelOwnerName;
     private String  hostelAddress;

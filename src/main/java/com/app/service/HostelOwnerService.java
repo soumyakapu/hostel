@@ -2,6 +2,7 @@ package com.app.service;
 
 import com.app.Model.HostelOwnerModel;
 import com.app.exceptionHandler.HostelException;
+import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -34,14 +35,24 @@ public class HostelOwnerService {
            throw  new HostelException("Hostel Contact is not valid");
        }
    }
-   public  HostelOwnerModel updateHostel( HostelOwnerModel hostelOwnerModel) throws HostelException {
+   public UpdateResult updateHostel(HostelOwnerModel hostelOwnerModel) throws HostelException {
        validateHostel(hostelOwnerModel);
        Query query = new Query();
-       query.addCriteria(Criteria.where("_id").is(new ObjectId(String.valueOf(hostelOwnerModel.getHostelContact()))));
-       Document document = new Document();
+       query.addCriteria(Criteria.where("_id").is(new ObjectId(hostelOwnerModel.getId())));
+       HostelOwnerModel hostelOwnerModel1 = mongoTemplate.findOne(query,HostelOwnerModel.class);
+       if(hostelOwnerModel == null){
+           throw  new HostelException("No hostel found");
+       }
+//       hostelOwnerModel1.setHostelName(hostelOwnerModel.getHostelName());
+//       hostelOwnerModel1.setHostelOwnerName(hostelOwnerModel.getHostelOwnerName());
+//       hostelOwnerModel1.setHostelContact(hostelOwnerModel.getHostelContact());
+//       hostelOwnerModel1.setFacilities(hostelOwnerModel.getFacilities());
+//       hostelOwnerModel1.setActive(hostelOwnerModel.isActive());
+//       hostelOwnerModel1.setHostelAddress(hostelOwnerModel.getHostelAddress());
+      Document document = new Document();
        Update update = Update.fromDocument(document);
-       return  mongoTemplate.
-               save(hostelOwnerModel,Collection_name);
+       return  mongoTemplate.updateFirst(query,update,HostelOwnerModel.class);
+//               save(hostelOwnerModel,Collection_name);
    }
 
 

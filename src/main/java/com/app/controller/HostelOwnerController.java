@@ -3,6 +3,7 @@ package com.app.controller;
 import com.app.Model.HostelOwnerModel;
 import com.app.exceptionHandler.HostelException;
 import com.app.service.HostelOwnerService;
+import com.mongodb.client.result.UpdateResult;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class HostelOwnerController {
 
     }
     @PutMapping(value = "/update", produces = "application/json")
-    public HostelOwnerModel updateHostel(@RequestBody HostelOwnerModel hostelOwnerModel) throws HostelException {
+    public UpdateResult updateHostel(@RequestBody HostelOwnerModel hostelOwnerModel) throws HostelException {
        return  hostelOwnerService.updateHostel(hostelOwnerModel);
     }
 
