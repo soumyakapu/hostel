@@ -45,18 +45,19 @@ public class HostelOwnerService {
        query.addCriteria(Criteria.where("_id").is(new ObjectId(hostelOwnerModel.getId())));
        Update update = new Update();
 
-       if (!hostelOwnerModel.getHostelOwnerName().isEmpty() ){
+
+
+       if (hostelOwnerModel.getHostelName() != null && !hostelOwnerModel.getHostelName().isEmpty()) {
+           update.set("hostelName", hostelOwnerModel.getHostelName());}
+       if (hostelOwnerModel.getHostelOwnerName()!=null && !hostelOwnerModel.getHostelOwnerName().isEmpty()){
            update.set("hostelOwnerName", hostelOwnerModel.getHostelOwnerName());}
-//       else {
-//
-//       }
-
-       if (!hostelOwnerModel.getHostelName().isEmpty()) update.set("hostelName", hostelOwnerModel.getHostelName());
-       if(!hostelOwnerModel.getHostelAddress().isEmpty()) update.set("hostelAddress",hostelOwnerModel.getHostelAddress());
-       if(hostelOwnerModel.getHostelContact().getHostelContact()==10) update.set("hostelContact",hostelOwnerModel.getHostelContact().getHostelContact());
-
+       if(hostelOwnerModel.getHostelAddress()!=null && !hostelOwnerModel.getHostelAddress().isEmpty()) update.set("hostelAddress",hostelOwnerModel.getHostelAddress());
+       if(hostelOwnerModel.getHostelContact().getHostelContact()>=10 ) update.set("hostelContact",hostelOwnerModel.getHostelContact().getHostelContact());
+       if(hostelOwnerModel.getHostelContact().getHostelOwnerContact()>=10)update.set("hostelOwnerContact",hostelOwnerModel.getHostelContact().getHostelOwnerContact());
+       if (hostelOwnerModel.getFacilities().getElectricity()!=null && hostelOwnerModel.getFacilities().getElectricity().isEmpty()) update.set("electricity",hostelOwnerModel.getFacilities().getElectricity());
+       if(hostelOwnerModel.getFacilities().getWater()!=null && hostelOwnerModel.getFacilities().getWater().isEmpty()) update.set("water",hostelOwnerModel.getFacilities().getWater());
+//       if (hostelOwnerModel.getFacilities().isRoomAvailability()!=false) update.set("roomAvailability",hostelOwnerModel.getFacilities().isRoomAvailability());
        UpdateResult updateResult = mongoTemplate.updateFirst(query, update, HostelOwnerModel.class);
-
        if (updateResult.getMatchedCount() < 0) {
            throw new HostelException("No hostel found");
        }
