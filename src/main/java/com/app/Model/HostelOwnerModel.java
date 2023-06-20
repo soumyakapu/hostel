@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Document(collection = "hostelOwnerModel")
 public class HostelOwnerModel {
     @Id
     private String id;

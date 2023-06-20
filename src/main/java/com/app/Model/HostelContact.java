@@ -1,5 +1,4 @@
 package com.app.Model;
-
 public class HostelContact {
     private long hostelContact;
     private long hostelOwnerContact;

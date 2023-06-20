@@ -1,5 +1,6 @@
 package com.app.controller;
 
+import com.app.Model.HostelContact;
 import com.app.Model.HostelOwnerModel;
 import com.app.exceptionHandler.HostelException;
 import com.app.service.HostelOwnerService;
@@ -34,6 +35,7 @@ public class HostelOwnerController {
     @GetMapping(value = "/AllHostels", produces = "application/json")
 
     public List<HostelOwnerModel> allHostels(){
+
         return hostelOwnerService.getAll();
     }
     @GetMapping(value = "/hostelbyname", produces = "application/json")
@@ -44,7 +46,14 @@ public class HostelOwnerController {
     public DeleteResult deletehostelByName(String  hostelName){
         return hostelOwnerService.deleteByHostelName(hostelName);
     }
-
+    @PutMapping("/activate")
+    public String  activateHostel(String  id){
+      return  hostelOwnerService.activateHostel(id);
+    }
+    @PutMapping("/deactive")
+    public String  deactivateHostel(String id){
+        return hostelOwnerService.deactiveHostel(id);
+    }
     @GetMapping("/get")
 
     public String get() {
