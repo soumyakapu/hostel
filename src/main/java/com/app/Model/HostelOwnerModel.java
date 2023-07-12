@@ -14,6 +14,7 @@ public class HostelOwnerModel {
     private String id;
     private String hostelName;
     private  String hostelOwnerName;
+    private String email;
     private String  hostelAddress;
     private HostelContact hostelContact;
     private HostelFacilities facilities;

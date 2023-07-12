@@ -2,10 +2,12 @@ package com.app.controller;
 
 import com.app.Model.HostelContact;
 import com.app.Model.HostelOwnerModel;
+import com.app.Model.ServerResponse;
 import com.app.exceptionHandler.HostelException;
 import com.app.service.HostelOwnerService;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +24,13 @@ public class HostelOwnerController {
 
     @PostMapping(value = "/post", produces = "application/json")
     @PreAuthorize("isAuthenticated()")
-    public HostelOwnerModel createHostel(@RequestBody HostelOwnerModel hostelOwnerModel) throws Exception {
-        return hostelOwnerService.createHostel(hostelOwnerModel);
+    public ServerResponse createHostel(@RequestBody HostelOwnerModel hostelOwnerModel) throws Exception {
+        try{
+            hostelOwnerService.createHostel(hostelOwnerModel);
+           return ServerResponse.builder().status(HttpStatus.CREATED).message("Successfully Registered").build();
+        }catch(HostelException e){
+            return ServerResponse.builder().status(HttpStatus.INTERNAL_SERVER_ERROR).message(e.getMessage()).build();
+        }
 
     }
 
@@ -34,9 +41,10 @@ public class HostelOwnerController {
 
     @GetMapping(value = "/AllHostels", produces = "application/json")
 
-    public List<HostelOwnerModel> allHostels(){
+    public ServerResponse allHostels(){
+        hostelOwnerService.getAll();
+        return ServerResponse.builder().status(HttpStatus.OK).build();
 
-        return hostelOwnerService.getAll();
     }
     @GetMapping(value = "/hostelbyname", produces = "application/json")
     public HostelOwnerModel hostelByName(String hostelOwnerModel){
