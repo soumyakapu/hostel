@@ -3,6 +3,7 @@ package com.app.service;
 import com.app.Model.HostelContact;
 import com.app.Model.HostelFacilities;
 import com.app.Model.HostelOwnerModel;
+import com.app.Model.LoginRequest;
 import com.app.exceptionHandler.HostelException;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
@@ -119,4 +120,12 @@ public class HostelOwnerService {
     }
 
 
+    public boolean login(LoginRequest loginRequest) throws HostelException {
+       Query query = new Query().addCriteria(Criteria.where("email").is(loginRequest.getEmail()));
+        HostelOwnerModel ownerModel = mongoTemplate.findOne(query, HostelOwnerModel.class);
+        if(ownerModel == null){
+            throw new HostelException("User not found");
+        }
+        return  ownerModel.getPassword().equals(loginRequest.getPassword());
+    }
 }

@@ -1,7 +1,7 @@
 package com.app.controller;
 
-import com.app.Model.HostelContact;
 import com.app.Model.HostelOwnerModel;
+import com.app.Model.LoginRequest;
 import com.app.Model.ServerResponse;
 import com.app.exceptionHandler.HostelException;
 import com.app.service.HostelOwnerService;
@@ -10,8 +10,6 @@ import com.mongodb.client.result.UpdateResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/")
@@ -42,8 +40,9 @@ public class HostelOwnerController {
     @GetMapping(value = "/AllHostels", produces = "application/json")
 
     public ServerResponse allHostels(){
-        hostelOwnerService.getAll();
-        return ServerResponse.builder().status(HttpStatus.OK).build();
+//        return
+//        hostelOwnerService.getAll();
+               return ServerResponse.builder().status(HttpStatus.OK).data(hostelOwnerService.getAll()).build();
 
     }
     @GetMapping(value = "/hostelbyname", produces = "application/json")
@@ -62,9 +61,16 @@ public class HostelOwnerController {
     public String  deactivateHostel(String id){
         return hostelOwnerService.deactiveHostel(id);
     }
-    @GetMapping("/get")
-
-    public String get() {
-        return "getting";
-    }
+   @PostMapping("/login")
+    public ServerResponse login(@RequestBody LoginRequest loginRequest)  {
+        // call the login from service
+//       fetch the user by email from database
+//       if user found then it should match the password if doesnot match the password it should throw the password invalid
+//       it should verify the email nd password that user given while register and while login if both matches then only user should go to user home page
+       try {
+         return hostelOwnerService.login(loginRequest) ? ServerResponse.builder().status(HttpStatus.OK).build() : ServerResponse.builder().status(HttpStatus.INTERNAL_SERVER_ERROR).message("Invalid password").build();
+       } catch (HostelException e) {
+           return ServerResponse.builder().status(HttpStatus.NOT_FOUND).message(e.getMessage()).build();
+       }
+   }
 }
